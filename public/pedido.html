@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pedidost</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Hamburgueria Sextar</h1>
+    <p  style="text-align: center; font-size: 2.2em; font-weight: bold; font-style: italic;">"A melhor forma de sextar é com um burguer"</p>
+    <h2>Cardápio</h2>
+    <br><br>
+    <table id="tabela_pratos"></table>
+    <br><br>
+    <b><label for="">Selecione a mesa:</label></b>
+    <select id="mesa">
+        <option value="">Selecione a mesa...</option>
+    </select>
+    <br><br>
+    <b><label for="">Selecione o garçom:</label></b>
+    <select id="garcom">
+        <option value="">Selecione o garçom...</option>
+    </select>
+    <br><br>
+    <h2>Formulário de cadastro do cliente</h2>
+    <br>
+    <b><label for="">Nome do Cliente:</label></b>
+    <input type="text" id="nome_cliente">
+    <br><br>
+    <b><label for="">Número para contato:</label></b>
+    <input type="text" id="numero_cliente" maxlength="15">
+
+    <br><br>
+    <input type="button" value="Finalizar" id="finalizar-btn">
+
+    <br><br>
+    <h2>Mesas Disponíveis (verdes) e Indisponíveis (vermelhas)</h2>
+    <div id="mesas-container">
+    </div>
+    <br><br>
+    <h2>Tabela de clientes e total a pagar</h2>
+    <table id="clientes_valor"></table>
+    <script type="module" src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,186 @@
+/* Corpo da página */
+body {
+    height: 100vh;
+    margin: 0;
+    background: linear-gradient(to bottom, #FFF9B1, rgb(238, 247, 194), #FFF9B1);
+}
+
+/* Título principal */
+h1 {
+    font-family: 'Century Gothic', Courier, monospace;
+    color: #030000;
+    font-size: 5rem;
+    text-align: center;
+    margin-top: 20px;  /* Adiciona uma margem superior */
+}
+
+h2 {
+    font-family: 'Century Gothic', Courier, monospace;
+    color: #333;
+    font-size: 2.5rem;
+    text-align: center;
+    margin-top: 20px;  /* Adiciona uma margem superior */
+}
+/* Estilo do parágrafo */
+p {
+    font-family: 'Century Gothic', Courier, monospace;
+}
+
+/* Estilo para o botão circular de seleção */
+button.select-btn {
+    background-color: #ddd;  /* Cor de fundo inicial */
+    border: none;
+    width: 30px;             /* Largura do botão */
+    height: 30px;            /* Altura do botão */
+    border-radius: 50%;      /* Torna o botão circular */
+    cursor: pointer;        /* Aponta para mão ao passar o mouse */
+    font-size: 16px;         /* Tamanho do ícone dentro do botão */
+    color: #333;             /* Cor do ícone */
+    display: inline-block;   /* Faz o botão e a quantidade ficarem na mesma linha */
+    transition: background-color 0.3s ease;  /* Efeito de transição suave ao clicar */
+}
+
+/* Estilo para o botão de seleção quando está ativo */
+button.select-btn.selected {
+    background-color: #4CAF50;  /* Cor verde quando selecionado */
+    color: white;               /* Cor branca no ícone */
+}
+
+/* Estilo para o campo de quantidade */
+.quantity-input {
+    display: inline-block;   /* Para aparecer na mesma linha */
+    margin-left: 10px;       /* Espaçamento entre o botão e a quantidade */
+    display: none;           /* Inicialmente oculto */
+}
+
+.quantity-input input {
+    width: 50px;             /* Largura do campo de quantidade */
+    padding: 5px;            /* Preenchimento interno */
+    text-align: center;      /* Alinha o número ao centro */
+    border: 1px solid #ccc; /* Borda suave */
+    border-radius: 5px;      /* Bordas arredondadas */
+}
+
+/* Estilo para as tabelas de pratos */
+#tabela_pratos {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse; /* Colapsa as bordas da tabela */
+}
+
+#tabela_pratos th, #tabela_pratos td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ccc;  /* Borda leve para as células */
+}
+
+#tabela_pratos th {
+    background-color: #f4f4f4;  /* Cor de fundo para o cabeçalho */
+}
+
+#tabela_pratos td {
+    background-color: #fff;   /* Cor de fundo para as células */
+}
+
+/* Estilo para a tabela de clientes e valores */
+#clientes_valor {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse; /* Colapsa as bordas da tabela */
+}
+
+#clientes_valor th, #clientes_valor td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ccc;  /* Borda leve para as células */
+}
+
+#clientes_valor th {
+    background-color: #f4f4f4;  /* Cor de fundo para o cabeçalho */
+    font-size: 1.2rem;         /* Tamanho maior para o cabeçalho */
+}
+
+#clientes_valor td {
+    background-color: #fff;   /* Cor de fundo para as células */
+    font-size: 1rem;           /* Tamanho da fonte padrão */
+}
+
+/* Botão de excluir na tabela de clientes */
+button.excluir-btn {
+    background-color: #f44336; /* Cor vermelha */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+button.excluir-btn:hover {
+    background-color: #d32f2f; /* Cor ao passar o mouse */
+}
+
+/* Melhorias na aparência de input e botões */
+input[type="text"], input[type="number"] {
+    width: 60%;               /* Diminui a largura dos inputs */
+    padding: 8px;             /* Reduz o padding */
+    margin: 5px 0 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.9rem;         /* Diminui o tamanho da fonte */
+}
+
+select {
+    width: 60%;               /* Diminui a largura dos selects */
+    padding: 8px;             /* Reduz o padding */
+    margin: 5px 0 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 0.9rem;         /* Diminui o tamanho da fonte */
+}
+
+/* Botão de finalizar */
+input[type="button"] {
+    background-color: #4CAF50;  /* Cor de fundo verde */
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+input[type="button"]:hover {
+    background-color: #45a049;  /* Cor ao passar o mouse */
+}
+
+/* Estilo das mesas */
+#mesas-container {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-gap: 10px;
+    margin-top: 20px;
+}
+
+.mesa {
+    width: 80px;      /* Aumenta a largura do quadrado */
+    height: 80px;     /* Aumenta a altura do quadrado */
+    margin: 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+    color: white; /* Para garantir que o texto seja visível */
+    font-weight: bold; /* Para deixar o texto mais destacado */
+    font-size: 16px; /* Ajusta o tamanho da fonte */
+}
+
+.disponivel {
+    background-color: green; /* Mesa disponível ficará verde */
+}
+
+.indisponivel {
+    background-color: red; /* Mesa indisponível ficará vermelha */
+}
