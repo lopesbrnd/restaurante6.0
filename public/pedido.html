@@ -4,15 +4,43 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>pedidost</title>
+    <title>Hamburgueria Sextar</title>
+    <link rel="icon" type="image/x-icon" href="media/favicon.ico">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Hamburgueria Sextar</h1>
-    <p  style="text-align: center; font-size: 2.2em; font-weight: bold; font-style: italic;">"A melhor forma de sextar é com um burguer"</p>
+    
+    <div class="header-image">
+        <img src="media/bannerburguer.png" alt="Banner da Hamburgueria">
+    </div>
+
+    <div class="link-boxes">
+        <a href="#tabela_pratos" class="link-box">
+        <div class="link-box">Pedidos</div></a>
+        <a href="#mesas-container" class="link-box">
+        <div class="link-box">Mesas</div></a>
+        <a href="#clientes_valor" class="link-box">
+        <div class="link-box">Financeiro</div></a>
+        <a href="#funcionarios" class="link-box">
+        <div class="link-box">Funcionários</div></a>
+        
+        
+    </div>
+
+    <div class="content">
+        <div class="text-box">
+            "A melhor forma de sextar é com um burguer"
+        </div>
+        <div class="video-box">
+            <video width="520" height="460" autoplay muted loop>
+                <source src="media/hamburguergirando.mp4" type="video/mp4" alt="Video Indisponivel">
+              </video>        
+        </div>
+    </div>
+
     <h2>Cardápio</h2>
     <br><br>
-    <table id="tabela_pratos"></table>
+    <div id = 'tabela_pratos'> <table id="tabela_pratos"></table> </div>
     <br><br>
     <b><label for="">Selecione a mesa:</label></b>
     <select id="mesa">
@@ -42,6 +70,50 @@
     <br><br>
     <h2>Tabela de clientes e total a pagar</h2>
     <table id="clientes_valor"></table>
+
+    <h2>Funcionários</h2>
+
+    <div id = 'funcionarios' class = fotos-funcionarios>
+
+    <div class="foto-funcionarios">
+        <figure>
+        <img width="216"height= "276" src="media/fotogiva.png" alt="foto de giva">
+        <figcaption>Gerente - Givanaldo</figcaption>
+        </figure>
+        </div>
+    <div class="foto-funcionarios">
+        <figure>
+        <img width="216"height= "276" src="media/fotojony.png" alt="foto de jony">
+        <figcaption>Chef - Jonatas</figcaption>
+        </figure>
+        </div>
+    <div class="foto-funcionarios">
+        <figure>
+        <img width="216"height= "276" src="media/fotobernardo.png" alt="foto de bernardo">
+        <figcaption>Garçom - Bernardo</figcaption>
+        </figure>
+        </div>
+    <div class="foto-funcionarios">
+        <figure>
+        <img width="216"height= "276" src="media/fotofacao.png" alt="foto de facao">
+        <figcaption>Garçom - Guilherme</figcaption>
+        </figure>
+    </div>
+    <div class="foto-funcionarios">
+        <figure>
+        <img width="216"height= "276" src="media/fotogabi.png" alt="foto de gabi">
+        <figcaption>Garçom - Gabi</figcaption>
+        </figure>
+        </div>
+    <div class="foto-funcionarios">
+        <figure>
+        <img  width="216"height= "276" src="media/fotomarina.png" alt="foto de marina">
+        <figcaption>Garçom - Marina</figcaption>
+        </figure>
+        </div>
+
+    </div>
+
     <script type="module" src="script.js"></script>
 </body>
 </html>

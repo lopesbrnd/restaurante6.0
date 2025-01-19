@@ -1,18 +1,81 @@
 /* Corpo da página */
+@font-face {
+    font-family: 'Gagalin';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Gagalin'), url('https://fonts.cdnfonts.com/s/57473/Gagalin-Regular.woff') format('woff');
+}
 body {
+    font-family: Gagalin, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     height: 100vh;
     margin: 0;
+    
+    
+}
+
+.header-image {
+    width: 1920px;
+    height: 140px;
+    background-color: #ccc;
+    text-align: center;
+    line-height: 140px;
+    margin-bottom: 20px;
+}
+
+.link-boxes {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom:100px;
+    font-size: 40px;
     background: linear-gradient(to bottom, #FFF9B1, rgb(238, 247, 194), #FFF9B1);
 }
 
-/* Título principal */
-h1 {
-    font-family: 'Century Gothic', Courier, monospace;
-    color: #030000;
-    font-size: 5rem;
+.link-box {
+    width: 420px;
+    height: 120px;
+    border: 1px solid #000;
     text-align: center;
-    margin-top: 20px;  /* Adiciona uma margem superior */
+    line-height: 120px;
+    cursor: pointer;
+    color:#000
+    
 }
+
+.content {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    max-width: 1320px;
+}
+
+.text-box {
+    width: 1000px;
+    height: 360px;
+    border: 0px solid #000;
+    text-align: left;
+    line-height: 1;
+    font-size: 75px;
+    margin-right:200px;
+    margin-top:110px;
+}
+
+.video-box {
+    width: 500px;
+    height: 500px;
+    border: 0px solid #000;
+    text-align: center;
+    line-height: 500px;
+    margin-bottom:50px
+}
+
+/* Título principal */
+
 
 h2 {
     font-family: 'Century Gothic', Courier, monospace;
@@ -22,8 +85,9 @@ h2 {
     margin-top: 20px;  /* Adiciona uma margem superior */
 }
 /* Estilo do parágrafo */
-p {
-    font-family: 'Century Gothic', Courier, monospace;
+b {
+    font-family: 'Arial', Courier, monospace;
+    margin-top: 20px ;
 }
 
 /* Estilo para o botão circular de seleção */
@@ -62,7 +126,7 @@ button.select-btn.selected {
 }
 
 /* Estilo para as tabelas de pratos */
-#tabela_pratos {
+.tabela_pratos {
     width: 80%;
     margin: 20px auto;
     border-collapse: collapse; /* Colapsa as bordas da tabela */
@@ -72,6 +136,7 @@ button.select-btn.selected {
     padding: 10px;
     text-align: left;
     border: 1px solid #ccc;  /* Borda leve para as células */
+    background: linear-gradient(to bottom, #FFF9B1, rgb(238, 247, 194), #FFF9B1);
 }
 
 #tabela_pratos th {
@@ -93,6 +158,7 @@ button.select-btn.selected {
     padding: 12px;
     text-align: left;
     border: 1px solid #ccc;  /* Borda leve para as células */
+    background: linear-gradient(to bottom, #FFF9B1, rgb(238, 247, 194), #FFF9B1);
 }
 
 #clientes_valor th {
@@ -175,6 +241,7 @@ input[type="button"]:hover {
     color: white; /* Para garantir que o texto seja visível */
     font-weight: bold; /* Para deixar o texto mais destacado */
     font-size: 16px; /* Ajusta o tamanho da fonte */
+    font-family: 'Arial', Courier, monospace;
 }
 
 .disponivel {
@@ -184,3 +251,54 @@ input[type="button"]:hover {
 .indisponivel {
     background-color: red; /* Mesa indisponível ficará vermelha */
 }
+.fotos-funcionarios {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 100px;
+    font-size: 26px;
+}
+
+.foto-funcionarios {
+    width: 270px;
+    height: 345px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.foto-funcionarios figure {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+}
+
+.foto-funcionarios img {
+    border: 1px solid #000;
+    width: 100%;
+    height: 100%;
+    object-fit: fill; /* Faz com que a imagem se ajuste ao container, mesmo que distorça */
+}
+
+figcaption {
+    font-weight: bold;
+    color: #000000;
+    margin-top: 5px; /* Espaço entre a borda e o texto */
+}
+
+a:link { 
+    text-decoration: none; 
+  } 
+  a:visited { 
+    text-decoration: none; 
+  } 
+  a:hover { 
+    text-decoration: none; 
+  } 
+  a:active { 
+    text-decoration: none; 
+  }
