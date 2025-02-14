@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import * as clienteModel from '../models/clienteModel';
 
-// Função para obter os alunos
 export async function getCliente(req: Request, res: Response) {
   try {
     const cliente = await clienteModel.getClientes();
