@@ -40,7 +40,7 @@ export async function getGarcom() {
       );
   
       const insertId = (result as ResultSetHeader).insertId;
-      return { insertId }; // Retorna o ID do aluno inserido
+      return { insertId }; 
     } catch (error) {
       console.error('Erro ao criar garcom:', error);
       throw new Error('Erro ao inserir dados do garcom');
