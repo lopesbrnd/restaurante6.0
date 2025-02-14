@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import * as garcomModel from '../models/edidoratoModel';
 
-// Função para obter os alunos
 export async function getPedidoprato(req: Request, res: Response) {
     try {
       const pedidoprato = await pedidopratoModel.getPedidoprato();
