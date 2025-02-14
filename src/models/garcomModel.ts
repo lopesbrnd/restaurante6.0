@@ -21,3 +21,28 @@ export async function getGarcom() {
     throw new Error('Erro ao obter dados dos garcons');
   }
 }
+
+  export async function criarGarcom(
+    nome:string
+    disponibilidade:boolean
+    taxa:number
+
+  ) {
+    // Verifique se algum valor é inválido antes de tentar inserir no banco
+    if (!nome || !disponibilidade || !taxa) {
+      throw new Error('Campos obrigatórios não preenchidos');
+    }
+  
+    try {
+      const [result] = await pool.execute(
+        'INSERT INTO Garcom (nome, disponibilidade, taxa) VALUES (?, ?)',
+        [nome, disponibilidade, taxa]
+      );
+  
+      const insertId = (result as ResultSetHeader).insertId;
+      return { insertId }; // Retorna o ID do aluno inserido
+    } catch (error) {
+      console.error('Erro ao criar garcom:', error);
+      throw new Error('Erro ao inserir dados do garcom');
+    }
+    }

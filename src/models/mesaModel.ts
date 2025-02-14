@@ -21,3 +21,27 @@ export async function getMesa() {
     throw new Error('Erro ao obter dados das mesas');
   }
 }
+
+export async function criarMesa(
+  nome: string,
+  numero:string
+) {
+  // Verifique se algum valor é inválido antes de tentar inserir no banco
+  if (!nome || !numero) {
+    throw new Error('Campos obrigatórios não preenchidos');
+  }
+
+  try {
+    const [result] = await pool.execute(
+      'INSERT INTO cliente (nome, numero) VALUES (?, ?)',
+      [nome, numero]
+    );
+
+    const insertId = (result as ResultSetHeader).insertId;
+    return { insertId }; // Retorna o ID do aluno inserido
+  } catch (error) {
+    console.error('Erro ao criar mesa:', error);
+    throw new Error('Erro ao inserir dados da mesa');
+  }
+  }
+
