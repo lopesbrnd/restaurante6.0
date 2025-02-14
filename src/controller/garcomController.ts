@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import * as garcomModel from '../models/garcomModel';
 
-// Função para obter os alunos
 export async function getGarcom(req: Request, res: Response) {
     try {
       const garcom = await garcomModel.getGarcom();
