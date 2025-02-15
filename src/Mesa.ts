@@ -3,7 +3,7 @@ export class Mesa {
     private _nome:string
     private _numero:number
     private _disponibilidade: boolean=true;
-    private _pedido:Pedido;
+    private _pedido!:Pedido;
 
     constructor(nome:string,numero:number) {;
         this._nome=nome;
