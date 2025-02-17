@@ -1,4 +1,4 @@
-import mysql from 'mysql2/promise'; // Usando a versão promise do mysql2
+import mysql, { ResultSetHeader } from 'mysql2/promise'; // Usando a versão promise do mysql2
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -11,6 +11,19 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME,
   port: Number(process.env.DB_PORT),
 });
+
+
+interface Cliente {
+  id: number;
+  nome: string;
+  email: string;
+}
+
+interface Prato {
+  id: number;
+  nome: string;
+  preco: number;
+}
 
 export async function getPedidos() {
   try {
