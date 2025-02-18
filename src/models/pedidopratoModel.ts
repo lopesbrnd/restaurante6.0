@@ -26,7 +26,7 @@ export async function criarPedidoprato(
   nome: string,
 ) {
   // Verifique se algum valor é inválido antes de tentar inserir no banco
-  if (!nome || ) {
+  if (!nome) {
     throw new Error('Campos obrigatórios não preenchidos');
   }
 
