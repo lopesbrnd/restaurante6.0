@@ -1,16 +1,11 @@
-import mysql from 'mysql2/promise'; // Usando a versão promise do mysql2
+// Usando a versão promise do mysql2
 import dotenv from 'dotenv';
+import mysql, { ResultSetHeader } from 'mysql2/promise';
+import pool from './db';
 
 dotenv.config();
 
 // Criação da conexão com o banco de dados
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: Number(process.env.DB_PORT),
-});
 
 export async function getGarcom() {
   try {
@@ -23,8 +18,8 @@ export async function getGarcom() {
 }
 
   export async function criarGarcom(
-    nome:string
-    disponibilidade:boolean
+    nome:string,
+    disponibilidade:boolean,
     taxa:number
 
   ) {

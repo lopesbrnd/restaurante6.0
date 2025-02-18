@@ -1,5 +1,5 @@
 import express from 'express';
-import * as pratoController from '../controller/pratoController';
+import * as pratoController from '../controller/pratoController.js';
 
 const router = express.Router();
 

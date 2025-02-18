@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as mesaModel from '../models/mesaModel';
+import * as mesaModel from '../models/mesaModel.js';
 
 export async function getMesa(req: Request, res: Response) {
     try {

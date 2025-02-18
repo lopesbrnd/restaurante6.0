@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as clienteModel from '../models/clienteModel';
+import * as clienteModel from '../models/clienteModel.js';
 
 export async function getCliente(req: Request, res: Response) {
   try {

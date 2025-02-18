@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
-import * as pedidosModel from '../models/pedidosModel';
+import * as pedidosModel from '../models/pedidosModel.js';
 
-// Função para obter os alunos
 export async function getPedidos(req: Request, res: Response) {
   try {
     const pedidos = await pedidosModel.getPedidos();

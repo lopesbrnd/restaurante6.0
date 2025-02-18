@@ -1,16 +1,10 @@
 import mysql from 'mysql2/promise';
 import dotenv from 'dotenv';
 import { ResultSetHeader } from 'mysql2';
+import pool from './db';
+
 
 dotenv.config();
-
-const pool = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: Number(process.env.DB_PORT),
-});
 
 export async function getClientes() {
     try {
@@ -38,7 +32,7 @@ export async function criarCliente(
     );
 
     const insertId = (result as ResultSetHeader).insertId;
-    return { insertId }; // Retorna o ID do aluno inserido
+    return { insertId }; 
   } catch (error) {
     console.error('Erro ao criar cliente:', error);
     throw new Error('Erro ao inserir dados do cliente');

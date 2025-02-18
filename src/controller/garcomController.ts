@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as garcomModel from '../models/garcomModel';
+import * as garcomModel from '../models/garcomModel.js';
 
 export async function getGarcom(req: Request, res: Response) {
     try {

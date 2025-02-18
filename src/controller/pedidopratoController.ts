@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as pedidopratoModel from '../models/pedidopratoModel';
+import * as pedidopratoModel from '../models/pedidopratoModel.js';
 
 export async function getPedidoprato(req: Request, res: Response) {
     try {

@@ -1,5 +1,7 @@
 {
   "compilerOptions": {
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
     "target": "ES6",      // Versão do JavaScript para a qual o código será transpilado
     "module": "ESNext", // Sistema de módulo (commonjs, es6, etc.)
     "rootDir": "./src",   // Diretório raiz onde estão os arquivos TypeScript
@@ -8,6 +10,6 @@
     "esModuleInterop": true, // Habilita a compatibilidade com módulos ES6
     "forceConsistentCasingInFileNames": true // Impede problemas de diferenciação de maiúsculas/minúsculas
   },
-  "include": ["src"],           // Diretório que contém os arquivos TypeScript a serem compilados
+  "include": ["src/**/*.ts"],           // Diretório que contém os arquivos TypeScript a serem compilados
   "exclude": ["node_modules"]   // Diretório que será excluído da compilação
 }

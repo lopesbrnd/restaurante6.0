@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as pratoModel from '../models/pratoModel';
+import * as pratoModel from '../models/pratoModel.js';
 
 export async function getPrato(req: Request, res: Response) {
   try {

@@ -1,10 +1,10 @@
-import mysql from 'mysql2/promise'; // Usando a versão promise do mysql2
+import mysql, { ResultSetHeader } from 'mysql2/promise'; // Usando a versão promise do mysql2
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 // Criação da conexão com o banco de dados
-const pool = mysql.createPool({
+export const pool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
@@ -37,7 +37,7 @@ export async function criarPedidoprato(
     );
 
     const insertId = (result as ResultSetHeader).insertId;
-    return { insertId }; // Retorna o ID do aluno inserido
+    return { insertId }; // Retorna o ID do prato do pedido inserido
   } catch (error) {
     console.error('Erro ao criar pratos do pedido:', error);
     throw new Error('Erro ao inserir dados do prato do pedido');

@@ -14,8 +14,8 @@ const mesa1 = new Mesa("MESA 1", 1);
 const mesa2 = new Mesa("MESA 2", 2);
 // Registrar pedido para a mesa 1
 const pedidoJoao = new Pedido(cliente1);
-pedidoJoao.adicionarPrato(prato1); // 2 Pizza Margherita
-pedidoJoao.adicionarPrato(prato2); // 1 Espaguete à Carbonara
+pedidoJoao.adicionarPrato(prato1);
+pedidoJoao.adicionarPrato(prato2);
 garcom.registrarPedido(mesa1, pedidoJoao);
 // Registrar pedido para a mesa 2
 const pedidoMaria = new Pedido(cliente2);

@@ -1,5 +1,5 @@
 import express from 'express';
-import * as mesaController from '../controller/mesaController';
+import * as mesaController from '../controller/mesaController.js';
 
 const router = express.Router();
 
