@@ -5,61 +5,53 @@ import { Cliente } from "../dist/Cliente.js";
 import { Pedido } from "../dist/Pedido.js";
 
 // Definição dos pratos
-let item1 = new Prato('X-Braga', 13, 'Pão, Hambúrguer Smash, Cheddar e Molho da casa');
-let item2 = new Prato('Duplo Braga', 20, 'Pão, 2 Hambúrguer Smash, Cheddar e Molho da casa');
-let item3 = new Prato('Clássico Bacurau', 15, 'Pão, Hambúrguer de Crane de Sol, Queijo de Coalho, Cebola Roxa e Molho da casa');
-let item4 = new Prato('Garcia Burguer', 16, 'Pão, Hambúrguer de Frango, Queijo sem lactose e Molho da casa');
-let item5 = new Prato('Felix Vegetariano', 17, 'Pão, Hambúrguer de Soja assado na brasa, Alface, Tomate, Cebola e Molho da casa');
-let item6 = new Prato('Batata Arante', 10, 'Batatas Fritas com tempero do chefe (acompanha Molho da casa)');
-let item7 = new Prato('Batata Arante com Cheddar e Bacon', 15, 'Batatas Fritas com tempero do chefe, Cheddar e Bacon (acompanha Molho da casa)');
-let item8 = new Prato('Anéis de Farias', 12, 'Anéis de Cebola fritos (acompanha molho)');
-let item9 = new Prato('Giva Shake de Morango', 16, 'Milk Shake de morango com calda de morango batido na hora');
-let item10 = new Prato('Giva Shake de Ninho com Nutella', 18, 'Milk Shake de Ninho com cobertura de Nutella batido na hora');
-let item11 = new Prato('Petit Gateau a La França', 22, 'Petit Gateau de chocolate com soverte de creme e calda de chocolate');
-let item12 = new Prato('Refrigerante 2L', 15, 'Coca-Cola, Cajuína, Guaraná, Sprite');
-let item13 = new Prato('Refrigerante 1L', 10, 'Coca-Cola, Cajuína, Guaraná, Pepsi');
-let item14 = new Prato('Refrigerante Latinha', 6, 'Coca-Cola, Guaraná, Sprite');
-let item15 = new Prato('Suco (Copo)', 7, 'Limão, Morango, Maracujá e Laranja');
-let item16 = new Prato('Suco (Jarra)', 15, 'Limão, Morango, Maracujá e Laranja');
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Fazendo o fetch para obter os pratos do servidor
+        const response = await fetch('http://localhost:3000/api/prato');
+        console.log('Resposta da API:', response);  // Verifique o status e o conteúdo
+        const pratos = await response.json();
+        console.log('Pratos recebidos do servidor:', pratos);
 
-let pratos = [item1, item2, item3, item4, item5, item6, item7, item8, item9, item10, item11, item12, item13, item14, item15, item16];
+        // Obtém a referência à tabela
+        const tabela = document.getElementById('tabela_pratos');
+        tabela.innerHTML = "";
 
-// Função para gerar os pratos na tabela
-function gerar_Pratos() {
-    const tabela = document.getElementById('tabela_pratos');
-    tabela.innerHTML = "";
-
-    // Cabeçalho da tabela
-    const cabecalho = document.createElement('tr');
-    cabecalho.innerHTML = `
-        <th>Nome</th>
-        <th>Preço</th>
-        <th>Descrição</th>
-        <th>Selecionar</th>
-    `;
-    tabela.appendChild(cabecalho);
-
-    // Adiciona os pratos na tabela
-    pratos.forEach(prato => {
-        const linha = document.createElement('tr');
-        linha.innerHTML = `
-            <td>${prato.nome}</td>
-            <td>R$ ${prato.preco.toFixed(2)}</td>
-            <td>${prato.descricao}</td>
-            <td>
-                <button class="select-btn" id="btn-${prato.nome}">●</button>
-                <div class="quantity-input" id="input-${prato.nome}">
-                    <input type="number" min="1" value="1" id="quantidade-${prato.nome}">
-                </div>
-            </td>
+        // Cabeçalho da tabela
+        const cabecalho = document.createElement('tr');
+        cabecalho.innerHTML = `
+            <th>Nome</th>
+            <th>Preço</th>
+            <th>Descrição</th>
+            <th>Selecionar</th>
         `;
-        tabela.appendChild(linha);
+        tabela.appendChild(cabecalho);
 
-        // Adiciona o event listener para o botão de seleção
-        const botaoSelecionar = document.getElementById(`btn-${prato.nome}`);
-        botaoSelecionar.addEventListener('click', () => selecionarPrato(prato, botaoSelecionar));
-    });
-}
+        // Adiciona os pratos na tabela
+        pratos.forEach(prato => {
+            const linha = document.createElement('tr');
+            linha.innerHTML = `
+                <td>${prato.nome}</td>
+                <td>R$ ${parseFloat(prato.preco)}</td>
+                <td>${prato.descricao}</td>
+                <td>
+                    <button class="select-btn" id="btn-${prato.nome}">●</button>
+                    <div class="quantity-input" id="input-${prato.nome}">
+                        <input type="number" min="1" value="1" id="quantidade-${prato.nome}">
+                    </div>
+                </td>
+            `;
+            tabela.appendChild(linha);
+
+            // Adiciona o event listener para o botão de seleção
+            const botaoSelecionar = document.getElementById(`btn-${prato.nome}`);
+            botaoSelecionar.addEventListener('click', () => selecionarPrato(prato, botaoSelecionar));
+        });
+
+    } catch (error) {
+        console.error('Erro ao carregar os pratos:', error);
+    }
+});
 
 // Função para selecionar ou desmarcar o prato
 let pratosSelecionados = [];
@@ -84,60 +76,59 @@ function selecionarPrato(prato, botao) {
     }
 }
 
-// Chama a função para gerar os pratos na tabela
-gerar_Pratos();
 
 // Definição das mesas
-let mesa1 = new Mesa("mesa 1",1);
-let mesa2 = new Mesa("mesa 2",2);
-let mesa3 = new Mesa("mesa 3",3);
-let mesa4 = new Mesa("mesa 4",4);
-let mesa5 = new Mesa("mesa 5",5);
-let mesa6 = new Mesa("mesa 6",6);
-let mesa7 = new Mesa("mesa 7",7);
-let mesa8 = new Mesa("mesa 8",8);
-let mesa9 = new Mesa("mesa 9",9);
-let mesa10 = new Mesa("mesa 10",10);
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Fazendo o fetch para obter as mesas do servidor
+        const response = await fetch('http://localhost:3000/api/mesa');
+        console.log('Resposta da API:', response);  // Verifique o status e o conteúdo
+        const mesas = await response.json();
+        console.log('Mesas recebidas do servidor:', mesas);
 
-let mesas_restaurante = [mesa1, mesa2, mesa3, mesa4, mesa5, mesa6, mesa7, mesa8, mesa9, mesa10];
+        // Função para gerar as opções de mesa no select e exibir quadrados de disponibilidade
+        function gerar_mesa() {
+            let select = document.getElementById("mesa");
+            let container = document.getElementById("mesas-container");
 
-// Função para gerar as opções de mesa no select e exibir quadrados de disponibilidade
-function gerar_mesa() {
-    let select = document.getElementById("mesa");
-    let container = document.getElementById("mesas-container");
-    
-    container.innerHTML = '';
+            container.innerHTML = '';  // Limpa o container antes de adicionar novas mesas
 
-    mesas_restaurante.forEach(mesa => {
+            mesas.forEach(mesa => {
+                // Definir a disponibilidade com base no número da mesa
+                const disponibilidade = mesa.disponibilidade == 1 ? true : false;
 
-        let nova_opcao = new Option(mesa.nome, mesa.numero);
-        select.options[select.options.length] = nova_opcao;
+                // Criando a opção no select
+                let nova_opcao = new Option(mesa.nome, mesa.numero);
+                select.options[select.options.length] = nova_opcao;
 
-        // Criando o quadrado para representar a mesa
-        let divMesa = document.createElement('div');
-        divMesa.classList.add('mesa');
-        divMesa.id = `mesa${mesa.numero}`;
+                // Criando o quadrado para representar a mesa
+                let divMesa = document.createElement('div');
+                divMesa.classList.add('mesa');
+                divMesa.id = `mesa${mesa.numero}`;
 
-        // Alterando a classe de cor do quadrado de acordo com a disponibilidade
-        if (mesa.disponibilidade) {
-            divMesa.classList.add('disponivel'); // Verde
-        } else {
-            divMesa.classList.add('indisponivel'); // Vermelho
+                // Alterando a classe de cor do quadrado de acordo com a disponibilidade
+                if (disponibilidade) {
+                    divMesa.classList.add('disponivel'); // Verde
+                } else {
+                    divMesa.classList.add('indisponivel'); // Vermelho
+                }
+
+                // Adicionando o nome da mesa dentro do quadrado
+                divMesa.innerHTML = mesa.nome;  // Exibe o nome da mesa
+
+                // Adiciona o quadrado ao container
+                container.appendChild(divMesa);
+            });
         }
 
-        // Adicionando o nome da mesa dentro do quadrado
-        divMesa.innerHTML = mesa.nome;  // Exibe o nome da mesa
+        // Chama a função para gerar as mesas no select e exibir os quadrados
+        gerar_mesa();
+    } catch (error) {
+        console.error('Erro ao carregar as mesas:', error);
+        alert('Erro ao carregar as mesas. Verifique o console para mais detalhes.');
+    }
+});
 
-        // Adiciona o quadrado ao container
-        container.appendChild(divMesa);
-    });
-}
-
-
-
-
-// Chama a função para gerar as mesas no select
-gerar_mesa();
 
 // Função para atualizar as cores dos quadrados de mesa conforme disponibilidade
 function atualizarMesas() {
