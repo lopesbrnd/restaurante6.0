@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-// Usando a versão promise do mysql2
-=======
-
->>>>>>> 6d201d8e06e31fb3fccdb8e3c7e4f834a460fa8a
 import dotenv from 'dotenv';
 import mysql, { ResultSetHeader } from 'mysql2/promise';
 import pool from './db';

@@ -18,10 +18,6 @@ interface Prato {
   nome: string;
   preco: number;
 }
-<<<<<<< HEAD
-=======
-
->>>>>>> 6d201d8e06e31fb3fccdb8e3c7e4f834a460fa8a
 export async function getPedidos() {
   try {
     const [rows] = await pool.execute('SELECT * FROM Pedidos');
