@@ -1,9 +1,3 @@
-import { Prato } from "../dist/Prato.js";
-import { Mesa } from "../dist/Mesa.js";
-import { Garcom } from "../dist/Garcom.js";
-import { Cliente } from "../dist/Cliente.js";
-import { Pedido } from "../dist/Pedido.js";
-
 // Definição dos pratos
 document.addEventListener('DOMContentLoaded', async () => {
     try {
@@ -202,10 +196,34 @@ document.getElementById("numero_cliente").addEventListener("input", function(eve
     event.target.value = phoneNumber;
 });
 
+// Função para limpar o formulário
+function limparFormulario() {
+    // Limpar campos do formulário
+    document.getElementById("nome_cliente").value = '';
+    document.getElementById("numero_cliente").value = '';
+    document.getElementById("mesa").selectedIndex = 0;
+    document.getElementById("garcom").selectedIndex = 0;
+    
+    // Limpar pratos selecionados
+    pratosSelecionados = [];
+    const buttons = document.querySelectorAll('.select-btn');
+    buttons.forEach(button => {
+        button.innerHTML = '●';
+        button.classList.remove('selected');
+    });
+    const quantityInputs = document.querySelectorAll('.quantity-input');
+    quantityInputs.forEach(input => {
+        input.style.display = 'none';
+        input.querySelector('input').value = 1;
+    });
+}
+
+// Adicionando um event listener para o botão de finalizar
+document.getElementById("finalizar-btn").addEventListener("click", Salvar_pedido);
 
 // Lista para armazenar os pedidos
 
-
+/*
 let pedidosRealizados = [];
 
 function gerarTabelaClientes() {
@@ -251,14 +269,11 @@ function excluirCliente(index, mesa) {
     gerarTabelaClientes();
 }
 
-
-
-
-// Função para salvar o pedido
 // Função para salvar o pedido
 async function Salvar_pedido() {
     let nome = document.getElementById("nome_cliente").value;
     let numero = document.getElementById("numero_cliente").value;
+    let cliente=new Cliente(nome,numero)
     const response = await fetch('http://localhost:3000/api/clientes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -274,10 +289,14 @@ async function Salvar_pedido() {
     let mesa_escolhida = document.getElementById('mesa').value;
 
     // Encontrar a mesa selecionada
-    let mesaSelecionada = mesas_restaurante.find(mesa => mesa.numero == mesa_escolhida);
+    const response_mesas = await fetch('http://localhost:3000/api/mesa');
+    console.log('Resposta da API:', response_mesas);  // Verifique o status e o conteúdo
+    const mesas = await response.json();
+    console.log('Mesas recebidas do servidor:', mesas);
+    let mesaSelecionada =mesas.find(mesa => mesa.id == mesa_escolhida);
 
     // Verificar se a mesa está disponível
-    if (!mesaSelecionada.disponibilidade) {
+    if (mesaSelecionada.disponibilidade==0) {
         alert("Esta mesa não está disponível.");
         return;  // Não permite que o pedido seja realizado se a mesa não estiver disponível
     }
@@ -300,7 +319,11 @@ async function Salvar_pedido() {
     });
 
     // Registrar o pedido e calcular a conta
-    let garcomSelecionado = garcons.find(g => g.nome === garcom_escolhido);
+    const response_garcom = await fetch('http://localhost:3000/api/garcom');
+    console.log('Resposta da API:', response_garcom);  // Verifique o status e o conteúdo
+    const garcons = await response.json();
+    console.log('Mesas recebidas do servidor:', garcons);
+    let garcomSelecionado = garcons.find(g => g.id === garcom_escolhido);
     garcomSelecionado.registrarPedido(mesaSelecionada, pedido);
     let totalConta = garcomSelecionado.calcularConta(mesaSelecionada);
 
@@ -332,32 +355,4 @@ async function Salvar_pedido() {
 document.addEventListener('DOMContentLoaded', () => {
     gerarTabelaClientes();
 });
-
-
-// Função para limpar o formulário
-function limparFormulario() {
-    // Limpar campos do formulário
-    document.getElementById("nome_cliente").value = '';
-    document.getElementById("numero_cliente").value = '';
-    document.getElementById("mesa").selectedIndex = 0;
-    document.getElementById("garcom").selectedIndex = 0;
-    
-    // Limpar pratos selecionados
-    pratosSelecionados = [];
-    const buttons = document.querySelectorAll('.select-btn');
-    buttons.forEach(button => {
-        button.innerHTML = '●';
-        button.classList.remove('selected');
-    });
-    const quantityInputs = document.querySelectorAll('.quantity-input');
-    quantityInputs.forEach(input => {
-        input.style.display = 'none';
-        input.querySelector('input').value = 1;
-    });
-}
-
-// Adicionando um event listener para o botão de finalizar
-document.getElementById("finalizar-btn").addEventListener("click", Salvar_pedido);
-
-console.log(pedidosRealizados)
-
+*/
