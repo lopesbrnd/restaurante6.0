@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const disponibilidade = mesa.disponibilidade == 1 ? true : false;
 
                 // Criando a opção no select
-                let nova_opcao = new Option(mesa.nome, mesa.numero);
+                let nova_opcao = new Option(mesa.nome, mesa.id);
                 select.options[select.options.length] = nova_opcao;
 
                 // Criando o quadrado para representar a mesa
@@ -123,6 +123,22 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Chama a função para gerar as mesas no select e exibir os quadrados
         gerar_mesa();
+
+        // Função para atualizar as cores dos quadrados de mesa conforme disponibilidade
+        function atualizarMesas() {
+            mesas.forEach(mesa => {
+                const mesaElement = document.getElementById(`mesa${mesa.numero}`);
+                if (mesa.disponibilidade) {
+                    mesaElement.classList.add('disponivel');
+                    mesaElement.classList.remove('indisponivel');
+                } else {
+                    mesaElement.classList.add('indisponivel');
+                    mesaElement.classList.remove('disponivel');
+                }
+            });
+        }
+        
+        atualizarMesas();
     } catch (error) {
         console.error('Erro ao carregar as mesas:', error);
         alert('Erro ao carregar as mesas. Verifique o console para mais detalhes.');
@@ -130,53 +146,68 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 
-// Função para atualizar as cores dos quadrados de mesa conforme disponibilidade
-function atualizarMesas() {
-    mesas_restaurante.forEach(mesa => {
-        const mesaElement = document.getElementById(`mesa${mesa.numero}`);
-        if (mesa.disponibilidade) {
-            mesaElement.classList.add('disponivel');
-            mesaElement.classList.remove('indisponivel');
-        } else {
-            mesaElement.classList.add('indisponivel');
-            mesaElement.classList.remove('disponivel');
-        }
-    });
-}
-
-
 // Chama a função para atualizar as mesas ao carregar a página
 document.addEventListener('DOMContentLoaded', () => {
     atualizarMesas();
 });
 
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Faz a requisição para a API
+        const response = await fetch('http://localhost:3000/api/garcom');
+        console.log('Resposta da API:', response);  // Verifique o status e o conteúdo
+        
+        if (!response.ok) {
+            throw new Error('Erro ao carregar dados da API');
+        }
 
+        // Obtém os dados JSON da resposta
+        const garcons = await response.json();
+        console.log('Mesas recebidas do servidor:', garcons);
 
-// Definição dos garçons
-let garcom_1 = new Garcom("Gabriela");
-let garcom_2 = new Garcom("Marina");
-let garcom_3 = new Garcom("Bernardo");
-let garcom_4 = new Garcom("Guilherme");
+        // Função para gerar as opções de garçom no select
+        function gerar_garcom() {
+            let select = document.getElementById("garcom");
+            // Supondo que a variável 'garcons' já tenha os dados dos garçons
+            garcons.forEach(garcom => {
+                let nova_opcao = new Option(garcom.nome, garcom.id);
+                select.options[select.options.length] = nova_opcao;
+            });
+        }
 
-let garcons = [garcom_1, garcom_2, garcom_3, garcom_4];
+        // Chama a função para gerar os garçons no select
+        gerar_garcom();
+        
+    } catch (error) {
+        console.error('Erro ao carregar ou processar os dados:', error);
+    }
+});
 
-// Função para gerar as opções de garçom no select
-function gerar_garcom() {
-    let select = document.getElementById("garcom");
-    garcons.forEach(garcom => {
-        let nova_opcao = new Option(garcom.nome, garcom.nome);
-        select.options[select.options.length] = nova_opcao;
-    });
-}
+document.getElementById("numero_cliente").addEventListener("input", function(event) {
+    let phoneNumber = event.target.value;
 
-// Chama a função para gerar os garçons no select
-gerar_garcom();
+    // Remove todos os caracteres não numéricos
+    phoneNumber = phoneNumber.replace(/\D/g, '');
+
+    // Aplica a máscara enquanto o cliente digita
+    if (phoneNumber.length <= 10) {
+        // Mascara para números de 10 dígitos: (XX) XXXX-XXXX
+        phoneNumber = phoneNumber.replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
+    } else {
+        // Mascara para números de 11 dígitos: (XX) XXXXX-XXXX
+        phoneNumber = phoneNumber.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
+    }
+
+    // Atualiza o valor do campo com a máscara em tempo real
+    event.target.value = phoneNumber;
+});
+
 
 // Lista para armazenar os pedidos
+
+
 let pedidosRealizados = [];
 
-// Função para salvar o pedido
-// Função para gerar a tabela de clientes e valores
 function gerarTabelaClientes() {
     const tabelaClientes = document.getElementById("clientes_valor");
     tabelaClientes.innerHTML = "";
@@ -218,35 +249,26 @@ function excluirCliente(index, mesa) {
 
     // Atualizar a tabela de clientes e a visualização das mesas
     gerarTabelaClientes();
-    atualizarMesas();
 }
 
-document.getElementById("numero_cliente").addEventListener("input", function(event) {
-    let phoneNumber = event.target.value;
 
-    // Remove todos os caracteres não numéricos
-    phoneNumber = phoneNumber.replace(/\D/g, '');
-
-    // Aplica a máscara enquanto o cliente digita
-    if (phoneNumber.length <= 10) {
-        // Mascara para números de 10 dígitos: (XX) XXXX-XXXX
-        phoneNumber = phoneNumber.replace(/^(\d{2})(\d{4})(\d{4})$/, '($1) $2-$3');
-    } else {
-        // Mascara para números de 11 dígitos: (XX) XXXXX-XXXX
-        phoneNumber = phoneNumber.replace(/^(\d{2})(\d{5})(\d{4})$/, '($1) $2-$3');
-    }
-
-    // Atualiza o valor do campo com a máscara em tempo real
-    event.target.value = phoneNumber;
-});
 
 
 // Função para salvar o pedido
 // Função para salvar o pedido
-function Salvar_pedido() {
-    let nome_cliente = document.getElementById("nome_cliente").value;
-    let numero_cliente = document.getElementById("numero_cliente").value;
-    let cliente = new Cliente(nome_cliente, numero_cliente);
+async function Salvar_pedido() {
+    let nome = document.getElementById("nome_cliente").value;
+    let numero = document.getElementById("numero_cliente").value;
+    const response = await fetch('http://localhost:3000/api/clientes', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nome , numero })
+      });
+  
+      if (!response.ok) {
+        const errorDetails = await response.json();
+        throw new Error(`Erro ao cadastrar cliente: ${errorDetails.message || 'Erro desconhecido'}`);
+      }
     
     let garcom_escolhido = document.getElementById("garcom").value;
     let mesa_escolhida = document.getElementById('mesa').value;
@@ -338,3 +360,4 @@ function limparFormulario() {
 document.getElementById("finalizar-btn").addEventListener("click", Salvar_pedido);
 
 console.log(pedidosRealizados)
+
