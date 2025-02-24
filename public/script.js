@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <td>
                     <button class="select-btn" id="btn-${prato.nome}">●</button>
                     <div class="quantity-input" id="input-${prato.nome}">
-                        <input type="number" min="1" value="1" id="quantidade-${prato.nome}">
+                        <input type="number" min="1" value="1" id="quantidade-${prato.id}">
                     </div>
                 </td>
             `;
@@ -271,6 +271,7 @@ function excluirCliente(index, mesa) {
 
 // Função para salvar o pedido
 async function Salvar_pedido() {
+    //salvando o cliente
     let nome = document.getElementById("nome_cliente").value;
     let numero = document.getElementById("numero_cliente").value;
     const response = await fetch('http://localhost:3000/api/clientes', {
@@ -307,14 +308,29 @@ async function Salvar_pedido() {
     }
 
     //falta
+
+    // Array para armazenar a contagem de pratos
+let pratos_quantidade = [];
+
+// Percorrer todos os pratos selecionados
+pratosSelecionados.forEach(prato => {
+    const quantidade = document.getElementById(`quantidade-${prato.id}`).value;
     
-    // Adicionar os pratos selecionados ao pedido
-    pratosSelecionados.forEach(prato => {
-        const quantidade = document.getElementById(`quantidade-${prato.nome}`).value;
-        for (let i = 0; i < quantidade; i++) {
-            pedido.adicionarPrato(prato);
-        }
-    });
+    // Verifica se o prato já existe no array pratos_quantidade
+    let pratoExistente = pratos_quantidade.find(item => item.prato_id == prato.id);
+    
+    if (pratoExistente) {
+        // Se o prato já existe, soma a quantidade
+        pratoExistente.quantidade += parseInt(quantidade);
+    } else {
+        // Se não existe, cria um novo objeto no formato desejado
+        pratos_quantidade.push({
+            prato_id: prato.id,
+            quantidade: parseInt(quantidade)
+        });
+    }
+    
+});
 
     // Registrar o pedido e calcular a conta
     const response_garcom = await fetch('http://localhost:3000/api/garcom');
