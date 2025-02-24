@@ -223,7 +223,7 @@ document.getElementById("finalizar-btn").addEventListener("click", Salvar_pedido
 
 // Lista para armazenar os pedidos
 
-/*
+
 let pedidosRealizados = [];
 
 function gerarTabelaClientes() {
@@ -273,7 +273,6 @@ function excluirCliente(index, mesa) {
 async function Salvar_pedido() {
     let nome = document.getElementById("nome_cliente").value;
     let numero = document.getElementById("numero_cliente").value;
-    let cliente=new Cliente(nome,numero)
     const response = await fetch('http://localhost:3000/api/clientes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -307,8 +306,7 @@ async function Salvar_pedido() {
         return;  // Não permite o pedido sem pratos selecionados
     }
 
-    // Criar o pedido
-    let pedido = new Pedido(cliente);
+    //falta
     
     // Adicionar os pratos selecionados ao pedido
     pratosSelecionados.forEach(prato => {
@@ -355,4 +353,3 @@ async function Salvar_pedido() {
 document.addEventListener('DOMContentLoaded', () => {
     gerarTabelaClientes();
 });
-*/
