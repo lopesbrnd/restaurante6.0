@@ -195,8 +195,6 @@ document.getElementById("numero_cliente").addEventListener("input", async functi
     // Atualiza o valor do campo com a máscara em tempo real
     event.target.value = phoneNumber;
 
-    // Se você precisar de uma operação assíncrona (exemplo: simulação de uma chamada assíncrona)
-    // await algumProcessoAssincrono();
 });
 
 // Função para limpar o formulário
@@ -348,8 +346,42 @@ async function excluirCliente(index, mesa) {
 
 async function Salvar_pedido() {
     try {
+        let garcom_escolhido = document.getElementById("garcom").value;
+        if (garcom_escolhido.length==0){
+            alert ("Escolha um garçom ou garçonete")
+            return;
+        }
+        let mesa_escolhida = parseInt(document.getElementById('mesa').value);
+        if (mesa_escolhida.length==0){
+            alert ("Escolha uma mesa")
+            return;
+        }
+
+        // Encontrar a mesa selecionada no banco de dados
+        const response_mesas = await fetch('http://localhost:3000/api/mesa');
+        const mesas = await response_mesas.json();
+        let mesaSelecionada = mesas.find(mesa => mesa.id == mesa_escolhida);
+
+        // Verificar se a mesa está disponível
+        if (mesaSelecionada.disponibilidade == 0) {
+            alert("Esta mesa não está disponível.");
+            return; 
+        }
+
+        // Verificar se há pratos selecionados
+        if (pratosSelecionados.length === 0) {
+            alert("Você precisa selecionar pelo menos um prato para realizar o pedido.");
+            return; 
+        }
+
         let nome = document.getElementById("nome_cliente").value;
+        if (nome.length==0){
+            alert('Preencha o campo "Nome do Cliente"')
+        }
         let numero = document.getElementById("numero_cliente").value;
+        if (numero.length==0){
+            alert('Preencha o campo "Número para contato"')
+        }
         
         // Criar o cliente no banco de dados
         const response_cliente = await fetch('http://localhost:3000/api/clientes', {
@@ -362,37 +394,18 @@ async function Salvar_pedido() {
             const errorDetails = await response_cliente.json();
             throw new Error(`Erro ao cadastrar cliente: ${errorDetails.message || 'Erro desconhecido'}`);
         }
-
+        
         const cliente = await response_cliente.json(); // Resposta do cliente cadastrado
+        console.log(cliente.id)
 
-        let garcom_escolhido = document.getElementById("garcom").value;
-        let mesa_escolhida = document.getElementById('mesa').value;
-
-        // Encontrar a mesa selecionada no banco de dados
-        const response_mesas = await fetch('http://localhost:3000/api/mesa');
-        const mesas = await response_mesas.json();
-        let mesaSelecionada = mesas.find(mesa => mesa.id == mesa_escolhida);
-
-        // Verificar se a mesa está disponível
-        if (mesaSelecionada.disponibilidade == 0) {
-            alert("Esta mesa não está disponível.");
-            return;  // Não permite que o pedido seja realizado se a mesa não estiver disponível
-        }
-
-        // Verificar se há pratos selecionados
-        if (pratosSelecionados.length === 0) {
-            alert("Você precisa selecionar pelo menos um prato para realizar o pedido.");
-            return;  // Não permite o pedido sem pratos selecionados
-        }
+        let cliente_id=parseInt(cliente.id)
+        let mesa=parseInt(mesaSelecionada.id)
 
         // Registrar o pedido no banco de dados
         const response_pedido = await fetch('http://localhost:3000/api/pedidos', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                cliente_id: cliente.id,
-                mesa_id: mesaSelecionada.id
-            })
+            body: JSON.stringify({cliente_id, mesa})
         });
 
         if (!response_pedido.ok) {
@@ -400,8 +413,8 @@ async function Salvar_pedido() {
             throw new Error(`Erro ao salvar pedido: ${errorDetails.message || 'Erro desconhecido'}`);
         }
 
-        const pedido = await response_pedido.json(); // Recebe o pedido salvo com ID
-
+        //const pedido = await response_pedido.json(); // Recebe o pedido salvo com ID
+        /*
         // Array para armazenar os pratos do pedido
         let pratos_quantidade = [];
 
@@ -453,9 +466,8 @@ async function Salvar_pedido() {
         await gerarTabelaClientes();
         await atualizarMesas();
         await limparFormulario();
-
+        */
         alert("Pedido realizado com sucesso!");
-
     } catch (error) {
         console.error('Erro ao salvar o pedido:', error);
         alert('Houve um erro ao realizar o pedido. Tente novamente.');

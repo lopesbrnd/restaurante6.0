@@ -1,23 +1,9 @@
 import mysql, { ResultSetHeader } from 'mysql2/promise'; // Usando a versão promise do mysql2
 import dotenv from 'dotenv';
-import pool from './db';
+import pool from './db.js';
 
 dotenv.config();
 
-// Criação da conexão com o banco de dados
-
-
-interface Cliente {
-  id: number;
-  nome: string;
-  email: string;
-}
-
-interface Prato {
-  id: number;
-  nome: string;
-  preco: number;
-}
 export async function getPedidos() {
   try {
     const [rows] = await pool.execute('SELECT * FROM Pedidos');
@@ -29,18 +15,18 @@ export async function getPedidos() {
 }
 
 export async function criarPedidos(
-  cliente: Cliente,
-  prato: Prato[]
+  cliente_id:number,
+  mesa:number
 ) {
   // Verifique se algum valor é inválido antes de tentar inserir no banco
-  if (!cliente || !prato) {
+  if (!cliente_id || !mesa) {
     throw new Error('Campos obrigatórios não preenchidos');
   }
 
   try {
     const [result] = await pool.execute(
-      'INSERT INTO cliente (cliente, prato) VALUES (?, ?)',
-      [cliente, prato]
+      'INSERT INTO pedidos (cliente_id, mesa) VALUES (?, ?)',
+      [cliente_id, mesa]
     );
 
     const insertId = (result as ResultSetHeader).insertId;

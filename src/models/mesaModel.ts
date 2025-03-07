@@ -1,6 +1,6 @@
 import mysql, { ResultSetHeader } from 'mysql2/promise';// Usando a versão promise do mysql2
 import dotenv from 'dotenv';
-import pool from './db';
+import pool from './db.js';
 
 dotenv.config();
 

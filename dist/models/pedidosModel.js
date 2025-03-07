@@ -7,17 +7,9 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import mysql from 'mysql2/promise'; // Usando a versão promise do mysql2
 import dotenv from 'dotenv';
+import pool from './db.js';
 dotenv.config();
-// Criação da conexão com o banco de dados
-const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: Number(process.env.DB_PORT),
-});
 export function getPedidos() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -30,14 +22,14 @@ export function getPedidos() {
         }
     });
 }
-export function criarPedidos(cliente, prato) {
+export function criarPedidos(cliente_id, mesa) {
     return __awaiter(this, void 0, void 0, function* () {
         // Verifique se algum valor é inválido antes de tentar inserir no banco
-        if (!cliente || !prato) {
+        if (!cliente_id || !mesa) {
             throw new Error('Campos obrigatórios não preenchidos');
         }
         try {
-            const [result] = yield pool.execute('INSERT INTO cliente (cliente, prato) VALUES (?, ?)', [cliente, prato]);
+            const [result] = yield pool.execute('INSERT INTO pedidos (cliente_id, mesa) VALUES (?, ?)', [cliente_id, mesa]);
             const insertId = result.insertId;
             return { insertId };
         }

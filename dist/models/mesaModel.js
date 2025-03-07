@@ -7,17 +7,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import mysql from 'mysql2/promise'; // Usando a versão promise do mysql2
 import dotenv from 'dotenv';
+import pool from './db.js';
 dotenv.config();
 // Criação da conexão com o banco de dados
-const pool = mysql.createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: Number(process.env.DB_PORT),
-});
 export function getMesa() {
     return __awaiter(this, void 0, void 0, function* () {
         try {

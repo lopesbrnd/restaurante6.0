@@ -11,13 +11,13 @@ export async function getPedidos(req: Request, res: Response) {
 }
 
 export async function criarPedidos(req: Request, res: Response): Promise<any> {
-  const { cliente, prato} = req.body;
-  if (!cliente || !prato) {
+  const { cliente_id, mesa} = req.body;
+  if (!cliente_id || !mesa) {
     return res.status(400).json({ message: 'Todos os campos devem ser preenchidos.' }); 
   }
 
   try {
-    const result = await pedidosModel.criarPedidos(cliente, prato);
+    const result = await pedidosModel.criarPedidos(cliente_id, mesa);
     return res.status(201).json({ id: result.insertId }); 
   } catch (error) {
     return res.status(500).json({ message: 'Erro ao criar cliente' }); 
