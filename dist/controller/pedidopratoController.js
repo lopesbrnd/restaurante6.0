@@ -21,12 +21,12 @@ export function getPedidoprato(req, res) {
 }
 export function criarPedidoprato(req, res) {
     return __awaiter(this, void 0, void 0, function* () {
-        const { nome } = req.body;
-        if (!nome) {
+        const { pedido_id, prato_id, quantidade } = req.body;
+        if (!pedido_id || !prato_id || !quantidade) {
             return res.status(400).json({ message: 'Todos os campos devem ser preenchidos.' });
         }
         try {
-            const result = yield pedidopratoModel.criarPedidoprato(nome);
+            const result = yield pedidopratoModel.criarPedidoprato(pedido_id, prato_id, quantidade);
             return res.status(201).json({ id: result.insertId });
         }
         catch (error) {

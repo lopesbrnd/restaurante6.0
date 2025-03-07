@@ -21,7 +21,7 @@ export const pool = mysql.createPool({
 export function getPedidoprato() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const [rows] = yield pool.execute('SELECT * FROM Pedidoprato');
+            const [rows] = yield pool.execute('SELECT * FROM pedidoprato');
             return rows;
         }
         catch (error) {
@@ -30,14 +30,14 @@ export function getPedidoprato() {
         }
     });
 }
-export function criarPedidoprato(nome) {
+export function criarPedidoprato(pedido_id, prato_id, quantidade) {
     return __awaiter(this, void 0, void 0, function* () {
         // Verifique se algum valor é inválido antes de tentar inserir no banco
-        if (!nome) {
+        if (!pedido_id || !prato_id || !quantidade) {
             throw new Error('Campos obrigatórios não preenchidos');
         }
         try {
-            const [result] = yield pool.execute('INSERT INTO cliente (nome, numero) VALUES (?, ?)', [nome]);
+            const [result] = yield pool.execute('INSERT INTO pedidoprato (pedido_id,prato_id, quantidade) VALUES (?, ?,?)', [pedido_id, prato_id, quantidade]);
             const insertId = result.insertId;
             return { insertId }; // Retorna o ID do prato do pedido inserido
         }

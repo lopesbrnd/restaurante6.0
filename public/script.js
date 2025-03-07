@@ -413,8 +413,8 @@ async function Salvar_pedido() {
             throw new Error(`Erro ao salvar pedido: ${errorDetails.message || 'Erro desconhecido'}`);
         }
 
-        //const pedido = await response_pedido.json(); // Recebe o pedido salvo com ID
-        /*
+        const pedido = await response_pedido.json(); // Recebe o pedido salvo com ID
+        
         // Array para armazenar os pratos do pedido
         let pratos_quantidade = [];
 
@@ -423,7 +423,7 @@ async function Salvar_pedido() {
             const quantidade = document.getElementById(`quantidade-${prato.id}`).value;
 
             // Salvar o prato do pedido na tabela 'pedido_prato'
-            const response_pedido_prato = await fetch('http://localhost:3000/api/pedido_prato', {
+            const response_pedido_prato = await fetch('http://localhost:3000/api/pedidoprato', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -439,7 +439,7 @@ async function Salvar_pedido() {
             }
 
             pratos_quantidade.push({
-                prato_id: prato.id,
+                prato_preco: parseInt(prato.preco),
                 quantidade: parseInt(quantidade)
             });
         }
@@ -447,11 +447,18 @@ async function Salvar_pedido() {
         // Registrar o garçom selecionado
         const response_garcom = await fetch('http://localhost:3000/api/garcom');
         const garcons = await response_garcom.json();
-        let garcomSelecionado = garcons.find(g => g.id === garcom_escolhido);
+        let garcomSelecionado = garcons.find(g => g.id == garcom_escolhido);
 
         // Calcular o total do pedido
-        let totalConta = garcomSelecionado.taxa * pratos_quantidade.reduce((acc, item) => acc + (item.quantidade * item.preco), 0);
+        let totalPedido = pratos_quantidade.reduce((acc, item) => acc + (parseFloat(item.quantidade) * parseFloat(item.prato_preco)), 0);
+        console.log(totalPedido)
 
+        // Verificar se a taxa do garçom é uma porcentagem ou valor fixo
+        let totalConta;
+
+        totalConta = totalPedido*(1+parseFloat(garcomSelecionado.taxa)); 
+        console.log(garcomSelecionado.taxa)
+        /*
         // Atualizar a disponibilidade da mesa para 'indisponível' no banco de dados
         const response_atualizar_mesa = await fetch(`http://localhost:3000/api/mesa/${mesaSelecionada.id}`, {
             method: 'PUT',
@@ -467,7 +474,7 @@ async function Salvar_pedido() {
         await atualizarMesas();
         await limparFormulario();
         */
-        alert("Pedido realizado com sucesso!");
+        alert(`Pedido realizado com sucesso! Total + taxa do garçom: R$ ${totalConta.toFixed(2)}`);
     } catch (error) {
         console.error('Erro ao salvar o pedido:', error);
         alert('Houve um erro ao realizar o pedido. Tente novamente.');

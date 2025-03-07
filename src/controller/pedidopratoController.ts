@@ -11,13 +11,13 @@ export async function getPedidoprato(req: Request, res: Response) {
 }
 
 export async function criarPedidoprato(req: Request, res: Response): Promise<any> {
-  const { nome } = req.body;
-  if (!nome) {
+  const { pedido_id,prato_id,quantidade } = req.body;
+  if (!pedido_id|| !prato_id || !quantidade) {
     return res.status(400).json({ message: 'Todos os campos devem ser preenchidos.' }); 
   }
 
   try {
-    const result = await pedidopratoModel.criarPedidoprato(nome);
+    const result = await pedidopratoModel.criarPedidoprato(pedido_id,prato_id,quantidade);
     return res.status(201).json({ id: result.insertId }); 
   } catch (error) {
     return res.status(500).json({ message: 'Erro ao criar pratos do pedido' }); 

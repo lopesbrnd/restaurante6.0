@@ -14,7 +14,7 @@ export const pool = mysql.createPool({
 
 export async function getPedidoprato() {
   try {
-    const [rows] = await pool.execute('SELECT * FROM Pedidoprato');
+    const [rows] = await pool.execute('SELECT * FROM pedidoprato');
     return rows;
   } catch (error) {
     console.error('Erro ao obter pratos do pedido:', error);
@@ -23,17 +23,19 @@ export async function getPedidoprato() {
 }
 
 export async function criarPedidoprato(
-  nome: string,
+  pedido_id:number,
+  prato_id:number,
+  quantidade:number
 ) {
   // Verifique se algum valor é inválido antes de tentar inserir no banco
-  if (!nome) {
+  if (!pedido_id || !prato_id || !quantidade) {
     throw new Error('Campos obrigatórios não preenchidos');
   }
 
   try {
     const [result] = await pool.execute(
-      'INSERT INTO cliente (nome, numero) VALUES (?, ?)',
-      [nome]
+      'INSERT INTO pedidoprato (pedido_id,prato_id, quantidade) VALUES (?, ?,?)',
+      [pedido_id,prato_id,quantidade]
     );
 
     const insertId = (result as ResultSetHeader).insertId;
