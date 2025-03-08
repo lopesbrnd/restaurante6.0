@@ -38,3 +38,13 @@ export async function criarCliente(
     throw new Error('Erro ao inserir dados do cliente');
   }
   }
+
+  export async function excluirCliente(id_cliente: number): Promise<boolean> {
+    try {
+      const [result] = await pool.execute('DELETE FROM cliente WHERE id_cliente = ?', [id_cliente]);
+      return (result as mysql.ResultSetHeader).affectedRows > 0;
+    } catch (error) {
+      console.error('Erro ao excluir cliente:', error);
+      throw new Error('Erro ao excluir o cliente');
+    }
+  }

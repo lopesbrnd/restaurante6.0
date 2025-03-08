@@ -39,3 +39,15 @@ export function criarCliente(nome, numero) {
         }
     });
 }
+export function excluirCliente(id_cliente) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const [result] = yield pool.execute('DELETE FROM cliente WHERE id_cliente = ?', [id_cliente]);
+            return result.affectedRows > 0;
+        }
+        catch (error) {
+            console.error('Erro ao excluir cliente:', error);
+            throw new Error('Erro ao excluir o cliente');
+        }
+    });
+}

@@ -34,3 +34,24 @@ export function criarCliente(req, res) {
         }
     });
 }
+export function excluirCliente(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const id_cliente = parseInt(req.params.id_cliente);
+        if (isNaN(id_cliente)) {
+            res.status(400).json({ message: 'ID de pedido inválido.' });
+            return;
+        }
+        try {
+            const sucesso = yield clienteModel.excluirCliente(id_cliente);
+            if (sucesso) {
+                res.status(200).json({ message: 'Cliente excluído com sucesso.' });
+            }
+            else {
+                res.status(404).json({ message: 'Cliente não encontrado.' });
+            }
+        }
+        catch (error) {
+            res.status(500).json({ message: 'Erro ao excluir cliente.', error });
+        }
+    });
+}

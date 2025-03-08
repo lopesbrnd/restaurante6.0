@@ -47,3 +47,17 @@ export function criarPedidoprato(pedido_id, prato_id, quantidade) {
         }
     });
 }
+export function excluirPedidoPrato(pedido_id, prato_id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            // A consulta DELETE foi modificada para excluir pelo pedido_id e prato_id
+            const [result] = yield pool.execute('DELETE FROM pedidoprato WHERE pedido_id = ? AND prato_id = ?', [pedido_id, prato_id]);
+            // Verifica se a exclusão foi bem-sucedida
+            return result.affectedRows > 0;
+        }
+        catch (error) {
+            console.error('Erro ao excluir pedido e prato:', error);
+            throw new Error('Erro ao excluir o pedido e prato');
+        }
+    });
+}

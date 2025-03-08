@@ -311,7 +311,7 @@ async function gerarTabelaClientes() {
                 <td>${cliente.nome}</td>
                 <td>Mesa ${String(pedido.mesa)}</td>
                 <td>${total.toFixed(2)}</td>
-                <td><button class="excluir-btn" data-pedido-id="${pedido.id}" data-mesa="${pedido.mesa}">Pagar</button></td>
+                <td><button class="excluir-btn" data-pedido-id="${pedido.id}" data-mesa="${pedido.mesa}" data-cliente-id='${cliente.id_cliente}'">Pagar</button></td>
             `;
             tabelaClientes.appendChild(linha);
         }
@@ -319,15 +319,16 @@ async function gerarTabelaClientes() {
             if (event.target && event.target.classList.contains('excluir-btn')) {
                 const pedidoId = event.target.getAttribute('data-pedido-id');
                 const mesa = event.target.getAttribute('data-mesa');
+                const id_cliente=event.target.getAttribute('data-cliente-id');
 
-                if (!pedidoId || !mesa) {
+                if (!pedidoId || !mesa || !id_cliente) {
                     console.error("Erro: Pedido ID ou Mesa inválidos.");
                     return;
                 }
                 console.log(pedidoId,mesa)
 
                 // Aguardar o registro do pagamento de forma assíncrona
-                await registrarPagamento(parseInt(pedidoId), parseInt(mesa));
+                await registrarPagamento(parseInt(pedidoId), parseInt(mesa),parseInt(id_cliente));
             }
         });
     } catch (error) {
@@ -367,27 +368,60 @@ async function atualizarMesas() {
     }
 }
 
-async function registrarPagamento(pedidoId, mesa) {
+async function registrarPagamento(pedidoId, mesa, id_cliente) {
     try {
-        // Excluir pedido do banco de dados
-        const responsePedido = await fetch(`http://localhost:3000/api/pedidos/${pedidoId}`, { method: 'DELETE' });
-        if (!responsePedido.ok) {
-            throw new Error(`Erro ao excluir pedido: ${responsePedido.statusText}`);
+        // Excluir pedido e cliente em paralelo, tratando exceções individualmente
+        const excluirPedido = fetch(`http://localhost:3000/api/pedidos/${pedidoId}`, { method: 'DELETE' })
+            .catch(error => console.error(`Erro ao excluir pedido: ${error.message}`));
+
+        const excluirCliente = fetch(`http://localhost:3000/api/clientes/${id_cliente}`, { method: 'DELETE' })
+            .catch(error => console.error(`Erro ao excluir cliente: ${error.message}`));
+
+        await Promise.all([excluirPedido, excluirCliente]);
+
+        // Buscar pratos do pedido em paralelo e tratar possíveis erros
+        let pratoPedido = [];
+        try {
+            const responsePratoPedido = await fetch('http://localhost:3000/api/pedidoprato');
+            const pedidosPratos = await responsePratoPedido.json();
+            pratoPedido = pedidosPratos.filter(pedidoPrato => pedidoPrato.pedido_id == pedidoId);
+        } catch (error) {
+            console.error(`Erro ao buscar pratos do pedido: ${error.message}`);
         }
 
-        // Atualizar a disponibilidade da mesa
-        const responseMesa = await fetch(`http://localhost:3000/api/mesa/${mesa}`, {
+        // Excluir os pratos do pedido, se necessário, tratando erros individualmente
+        const deletarPratos = pratoPedido.map(async (prato) => {
+            try {
+                const responsePrato = await fetch(`http://localhost:3000/api/pedidoprato/pedidos/${pedidoId}/pratos/${prato.prato_id}`, {
+                    method: 'DELETE'
+                });
+                if (!responsePrato.ok) {
+                    throw new Error(`Erro ao excluir prato ${prato.prato_id}: ${responsePrato.statusText}`);
+                }
+            } catch (error) {
+                console.error(error.message);
+            }
+        });
+
+        // Atualizar a disponibilidade da mesa, com tratamento de exceção
+        let atualizarMesa = fetch(`http://localhost:3000/api/mesa/${mesa}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ disponibilidade: 1 }) // Define a mesa como disponível
-        });
-        if (!responseMesa.ok) {
-            throw new Error(`Erro ao atualizar mesa: ${responseMesa.statusText}`);
-        }
+        }).catch(error => console.error(`Erro ao atualizar a disponibilidade da mesa: ${error.message}`));
+
+        // Esperar todas as operações de exclusão e atualização serem concluídas
+        await Promise.all([
+            ...deletarPratos,  // Excluir pratos do pedido
+            atualizarMesa       // Atualizar a disponibilidade da mesa
+        ]);
 
         // Atualizar a tabela de clientes e a visualização das mesas
-        await gerarTabelaClientes();
-        await atualizarMesas();
+        await Promise.all([
+            gerarTabelaClientes().catch(error => console.error(`Erro ao gerar tabela de clientes: ${error.message}`)),
+            atualizarMesas().catch(error => console.error(`Erro ao atualizar mesas: ${error.message}`))
+        ]);
+        
     } catch (error) {
         console.error('Erro ao registrar pagamento:', error);
     }

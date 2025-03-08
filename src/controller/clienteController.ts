@@ -23,3 +23,24 @@ export async function criarCliente(req: Request, res: Response): Promise<any> {
     return res.status(500).json({ message: 'Erro ao criar cliente' }); 
   }
   }
+
+  export async function excluirCliente(req: Request, res: Response): Promise<void> {
+    const id_cliente = parseInt(req.params.id_cliente);
+  
+    if (isNaN(id_cliente)) {
+      res.status(400).json({ message: 'ID de pedido inválido.' });
+      return;
+    }
+  
+    try {
+      const sucesso = await clienteModel.excluirCliente(id_cliente)
+  
+      if (sucesso) {
+        res.status(200).json({ message: 'Cliente excluído com sucesso.' });
+      } else {
+        res.status(404).json({ message: 'Cliente não encontrado.' });
+      }
+    } catch (error) {
+      res.status(500).json({ message: 'Erro ao excluir cliente.', error});
+    }
+  }

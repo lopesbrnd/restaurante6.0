@@ -46,3 +46,18 @@ export async function criarPedidoprato(
   }
   }
 
+export async function excluirPedidoPrato(pedido_id: number, prato_id: number): Promise<boolean> { 
+  try {
+    // A consulta DELETE foi modificada para excluir pelo pedido_id e prato_id
+    const [result] = await pool.execute(
+      'DELETE FROM pedidoprato WHERE pedido_id = ? AND prato_id = ?', 
+      [pedido_id, prato_id]
+    );
+
+    // Verifica se a exclusão foi bem-sucedida
+    return (result as mysql.ResultSetHeader).affectedRows > 0;
+  } catch (error) {
+    console.error('Erro ao excluir pedido e prato:', error);
+    throw new Error('Erro ao excluir o pedido e prato');
+  }
+}
