@@ -471,10 +471,12 @@ async function Salvar_pedido() {
         let nome = document.getElementById("nome_cliente").value;
         if (nome.length==0){
             alert('Preencha o campo "Nome do Cliente"')
+            return;
         }
         let numero = document.getElementById("numero_cliente").value;
         if (numero.length==0){
             alert('Preencha o campo "Número para contato"')
+            return;
         }
         
         // Criar o cliente no banco de dados
