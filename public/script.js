@@ -311,10 +311,25 @@ async function gerarTabelaClientes() {
                 <td>${cliente.nome}</td>
                 <td>Mesa ${String(pedido.mesa)}</td>
                 <td>${total.toFixed(2)}</td>
-                <td><button onclick="registrarPagamento(${cliente.id})">Pagar</button></td>
+                <td><button class="excluir-btn" data-pedido-id="${pedido.id}" data-mesa="${pedido.mesa}">Pagar</button></td>
             `;
             tabelaClientes.appendChild(linha);
         }
+        document.addEventListener('click', async function(event) {
+            if (event.target && event.target.classList.contains('excluir-btn')) {
+                const pedidoId = event.target.getAttribute('data-pedido-id');
+                const mesa = event.target.getAttribute('data-mesa');
+
+                if (!pedidoId || !mesa) {
+                    console.error("Erro: Pedido ID ou Mesa inválidos.");
+                    return;
+                }
+                console.log(pedidoId,mesa)
+
+                // Aguardar o registro do pagamento de forma assíncrona
+                await registrarPagamento(parseInt(pedidoId), parseInt(mesa));
+            }
+        });
     } catch (error) {
         console.error('Erro ao gerar a tabela de clientes:', error);
     }
@@ -324,32 +339,6 @@ async function gerarTabelaClientes() {
 document.addEventListener('DOMContentLoaded', async () => {
     await gerarTabelaClientes();
 });
-
-/*// Adiciona o evento para o botão de pagamento
-        const botaoExcluir = linha.querySelector(".excluir-btn");
-        botaoExcluir.addEventListener('click', async () => {
-            await registrarPagamento(pedido.id, mesa);
-        }); */
-/*
-async function registrarPagamento(pedidoId, mesa) {
-    try {
-        // Excluir pedido do banco de dados
-        await fetch(`http://localhost:3000/api/pedido/${pedidoId}`, { method: 'DELETE' });
-
-        // Atualizar a disponibilidade da mesa
-        await fetch(`http://localhost:3000/api/mesa/${mesa.id}`, {
-            method: 'PATCH',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ disponibilidade: 1 }) // Define a mesa como disponível
-        });
-
-        // Atualizar a tabela de clientes e a visualização das mesas
-        await gerarTabelaClientes();
-        await atualizarMesas();
-    } catch (error) {
-        console.error('Erro ao registrar pagamento:', error);
-    }
-}
 
 async function atualizarMesas() {
     try {
@@ -376,35 +365,33 @@ async function atualizarMesas() {
     } catch (error) {
         console.error('Erro ao atualizar mesas:', error);
     }
-}*/
-/*
-async function calcularTotalPedido(pedidoId) {
-    const responsePedidoPratos = await fetch(`http://localhost:3000/api/pedido_prato?pedido_id=${pedidoId}`);
-    const pedidoPratos = await responsePedidoPratos.json();
+}
 
-    let total = 0;
-    for (const pedidoPrato of pedidoPratos) {
-        const prato = await fetch(`http://localhost:3000/api/pratos/${pedidoPrato.prato_id}`).then(res => res.json());
-        total += prato.preco * pedidoPrato.quantidade;
+async function registrarPagamento(pedidoId, mesa) {
+    try {
+        // Excluir pedido do banco de dados
+        const responsePedido = await fetch(`http://localhost:3000/api/pedidos/${pedidoId}`, { method: 'DELETE' });
+        if (!responsePedido.ok) {
+            throw new Error(`Erro ao excluir pedido: ${responsePedido.statusText}`);
+        }
+
+        // Atualizar a disponibilidade da mesa
+        const responseMesa = await fetch(`http://localhost:3000/api/mesa/${mesa}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ disponibilidade: 1 }) // Define a mesa como disponível
+        });
+        if (!responseMesa.ok) {
+            throw new Error(`Erro ao atualizar mesa: ${responseMesa.statusText}`);
+        }
+
+        // Atualizar a tabela de clientes e a visualização das mesas
+        await gerarTabelaClientes();
+        await atualizarMesas();
+    } catch (error) {
+        console.error('Erro ao registrar pagamento:', error);
     }
-
-    return total;
 }
-*/
-
-// Função para excluir o cliente e atualizar a disponibilidade da mesa
-/*
-async function excluirCliente(index, mesa) {
-    // Remover o pedido da lista
-    pedidosRealizados.splice(index, 1);
-
-    // Atualizar a disponibilidade da mesa
-    await mesa.atualizarDisponibilidade(true);
-
-    // Atualizar a tabela de clientes e a visualização das mesas
-    await gerarTabelaClientes();
-}
-    */
 
 
 async function Salvar_pedido() {
@@ -414,11 +401,13 @@ async function Salvar_pedido() {
             alert ("Escolha um garçom ou garçonete")
             return;
         }
+        
         let mesa_escolhida = parseInt(document.getElementById('mesa').value);
-        if (mesa_escolhida.length==0){
-            alert ("Escolha uma mesa")
+        if (!mesa_escolhida) {
+            alert("Escolha uma mesa");
             return;
         }
+
 
         // Encontrar a mesa selecionada no banco de dados
         const response_mesas = await fetch('http://localhost:3000/api/mesa');
@@ -522,20 +511,18 @@ async function Salvar_pedido() {
         totalConta = totalPedido*(1+parseFloat(garcomSelecionado.taxa)); 
         console.log(garcomSelecionado.taxa)
         
-        // Atualizar a disponibilidade da mesa para 'indisponível' no banco de dados
-        const response_atualizar_mesa = await fetch(`http://localhost:3000/api/mesa`)
-            /*method: 'PUT',
+        // Atualizar a disponibilidade da mesa
+        const responseMesa = await fetch(`http://localhost:3000/api/mesa/${mesa}`, {
+            method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ disponibilidade: 0 }) // Indisponível*/
-        
-
-        if (!response_atualizar_mesa.ok) {
-            throw new Error('Erro ao atualizar disponibilidade da mesa');
+            body: JSON.stringify({ disponibilidade: 0 }) // Define a mesa como disponível
+        });
+        if (!responseMesa.ok) {
+            throw new Error(`Erro ao atualizar mesa: ${responseMesa.statusText}`);
         }
         
-        //await gerarTabelaClientes();
-        //await atualizarMesas();
-
+        await gerarTabelaClientes();
+        await atualizarMesas();
         await limparFormulario();
         
         alert(`Pedido realizado com sucesso! Total + taxa do garçom: R$ ${totalConta.toFixed(2)}`);

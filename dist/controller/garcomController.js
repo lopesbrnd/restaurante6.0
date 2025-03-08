@@ -19,18 +19,3 @@ export function getGarcom(req, res) {
         }
     });
 }
-export function criarGarcom(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { nome, disponibilidade, taxa } = req.body;
-        if (!nome || !disponibilidade || !taxa) {
-            return res.status(400).json({ message: 'Todos os campos devem ser preenchidos.' });
-        }
-        try {
-            const result = yield garcomModel.criarGarcom(nome, disponibilidade, taxa);
-            return res.status(201).json({ id: result.insertId });
-        }
-        catch (error) {
-            return res.status(500).json({ message: 'Erro ao criar garcom' });
-        }
-    });
-}

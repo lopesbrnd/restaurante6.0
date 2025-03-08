@@ -23,20 +23,3 @@ export function getGarcom() {
         }
     });
 }
-export function criarGarcom(nome, disponibilidade, taxa) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Verifique se algum valor é inválido antes de tentar inserir no banco
-        if (!nome || !disponibilidade || !taxa) {
-            throw new Error('Campos obrigatórios não preenchidos');
-        }
-        try {
-            const [result] = yield pool.execute('INSERT INTO Garcom (nome, disponibilidade, taxa) VALUES (?, ?)', [nome, disponibilidade, taxa]);
-            const insertId = result.insertId;
-            return { insertId };
-        }
-        catch (error) {
-            console.error('Erro ao criar garcom:', error);
-            throw new Error('Erro ao inserir dados do garcom');
-        }
-    });
-}

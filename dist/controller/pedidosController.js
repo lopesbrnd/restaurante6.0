@@ -34,3 +34,24 @@ export function criarPedidos(req, res) {
         }
     });
 }
+export function excluirPedido(req, res) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const pedidoId = parseInt(req.params.pedidoId);
+        if (isNaN(pedidoId)) {
+            res.status(400).json({ message: 'ID de pedido inválido.' });
+            return;
+        }
+        try {
+            const sucesso = yield pedidosModel.excluirPedido(pedidoId);
+            if (sucesso) {
+                res.status(200).json({ message: 'Pedido excluído com sucesso.' });
+            }
+            else {
+                res.status(404).json({ message: 'Pedido não encontrado.' });
+            }
+        }
+        catch (error) {
+            res.status(500).json({ message: 'Erro ao excluir pedido.', error });
+        }
+    });
+}

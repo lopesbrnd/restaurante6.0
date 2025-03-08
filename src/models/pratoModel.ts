@@ -16,28 +16,3 @@ export async function getPrato() {
     throw new Error('Erro ao obter dados dos pratos');
   }
 }
-
-export async function criarPrato(
-    nome: string,
-    quantidade:number,
-    preco:number,
-    descricao:string
-  ) {
-    // Verifique se algum valor é inválido antes de tentar inserir no banco
-    if (!nome || !quantidade || !preco || !descricao) {
-      throw new Error('Campos obrigatórios não preenchidos');
-    }
-  
-    try {
-      const [result] = await pool.execute(
-        'INSERT INTO cliente (nome, quantidade, preco, descricao) VALUES (?, ?, ?, ?)',
-        [nome, quantidade, preco, descricao]
-      );
-  
-      const insertId = (result as ResultSetHeader).insertId;
-      return { insertId }; 
-    } catch (error) {
-      console.error('Erro ao criar prato:', error);
-      throw new Error('Erro ao inserir dados do prato');
-    }
-    }

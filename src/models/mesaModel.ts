@@ -9,7 +9,7 @@ dotenv.config();
 
 export async function getMesa() {
   try {
-    const [rows] = await pool.execute('SELECT * FROM Mesa');
+    const [rows] = await pool.execute('SELECT * FROM mesa');
     return rows;
   } catch (error) {
     console.error('Erro ao obter mesas:', error);
@@ -17,26 +17,17 @@ export async function getMesa() {
   }
 }
 
-export async function criarMesa(
-  nome: string,
-  numero:string
-) {
-  // Verifique se algum valor é inválido antes de tentar inserir no banco
-  if (!nome || !numero) {
-    throw new Error('Campos obrigatórios não preenchidos');
-  }
 
-  try {
-    const [result] = await pool.execute(
-      'INSERT INTO cliente (nome, numero) VALUES (?, ?)',
-      [nome, numero]
-    );
-
-    const insertId = (result as ResultSetHeader).insertId;
-    return { insertId }; // Retorna o ID da mesa inserida 
-  } catch (error) {
-    console.error('Erro ao criar mesa:', error);
-    throw new Error('Erro ao inserir dados da mesa');
-  }
+  export async function atualizarDisponibilidadeMesa(mesaId: number, disponibilidade: number): Promise<boolean> {
+    try {
+      const [result] = await pool.execute(
+        'UPDATE mesa SET disponibilidade = ? WHERE id = ?',
+        [disponibilidade, mesaId]
+      );
+      return (result as mysql.ResultSetHeader).affectedRows > 0;
+    } catch (error) {
+      console.error('Erro ao atualizar a mesa:', error);
+      throw new Error('Erro ao atualizar a disponibilidade da mesa');
+    }
   }
 

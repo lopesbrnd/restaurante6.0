@@ -10,16 +10,24 @@ export async function getMesa(req: Request, res: Response) {
     }
   }
 
-  export async function criarMesa(req: Request, res: Response): Promise<any> {
-    const { nome, numero } = req.body;
-    if (!nome || !numero) {
-      return res.status(400).json({ message: 'Todos os campos devem ser preenchidos.' }); 
+
+  export async function atualizarDisponibilidadeMesa(req: Request, res: Response): Promise<void> {
+    const mesaId = parseInt(req.params.mesaId);
+    const { disponibilidade } = req.body;
+  
+    if (isNaN(mesaId) || typeof disponibilidade !== 'number') {
+      res.status(400).json({ message: 'Parâmetros inválidos.' });
+      return;
     }
   
     try {
-      const result = await mesaModel.criarMesa(nome, numero);
-      return res.status(201).json({ id: result.insertId }); 
+      const sucesso = await mesaModel.atualizarDisponibilidadeMesa(mesaId, disponibilidade);
+      if (sucesso) {
+        res.status(200).json({ message: 'Mesa atualizada com sucesso.' });
+      } else {
+        res.status(404).json({ message: 'Mesa não encontrada.' });
+      }
     } catch (error) {
-      return res.status(500).json({ message: 'Erro ao criar mesa' }); 
+      res.status(500).json({ message: 'Erro ao atualizar a mesa.', error });
     }
-    }
+  }

@@ -39,3 +39,15 @@ export function criarPedidos(cliente_id, mesa) {
         }
     });
 }
+export function excluirPedido(pedidoId) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const [result] = yield pool.execute('DELETE FROM pedidos WHERE id = ?', [pedidoId]);
+            return result.affectedRows > 0;
+        }
+        catch (error) {
+            console.error('Erro ao excluir pedido:', error);
+            throw new Error('Erro ao excluir o pedido');
+        }
+    });
+}

@@ -23,20 +23,3 @@ export function getPrato() {
         }
     });
 }
-export function criarPrato(nome, quantidade, preco, descricao) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // Verifique se algum valor é inválido antes de tentar inserir no banco
-        if (!nome || !quantidade || !preco || !descricao) {
-            throw new Error('Campos obrigatórios não preenchidos');
-        }
-        try {
-            const [result] = yield pool.execute('INSERT INTO cliente (nome, quantidade, preco, descricao) VALUES (?, ?, ?, ?)', [nome, quantidade, preco, descricao]);
-            const insertId = result.insertId;
-            return { insertId };
-        }
-        catch (error) {
-            console.error('Erro ao criar prato:', error);
-            throw new Error('Erro ao inserir dados do prato');
-        }
-    });
-}

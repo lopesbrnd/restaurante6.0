@@ -37,3 +37,12 @@ export async function criarPedidos(
   }
   }
 
+  export async function excluirPedido(pedidoId: number): Promise<boolean> {
+    try {
+      const [result] = await pool.execute('DELETE FROM pedidos WHERE id = ?', [pedidoId]);
+      return (result as mysql.ResultSetHeader).affectedRows > 0;
+    } catch (error) {
+      console.error('Erro ao excluir pedido:', error);
+      throw new Error('Erro ao excluir o pedido');
+    }
+  }

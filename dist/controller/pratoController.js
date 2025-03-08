@@ -19,18 +19,3 @@ export function getPrato(req, res) {
         }
     });
 }
-export function criarPrato(req, res) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { nome, quantidade, preco, descricao } = req.body;
-        if (!nome || !quantidade || !preco || !descricao) {
-            return res.status(400).json({ message: 'Todos os campos devem ser preenchidos.' });
-        }
-        try {
-            const result = yield pratoModel.criarPrato(nome, quantidade, preco, descricao);
-            return res.status(201).json({ id: result.insertId });
-        }
-        catch (error) {
-            return res.status(500).json({ message: 'Erro ao criar cliente' });
-        }
-    });
-}
