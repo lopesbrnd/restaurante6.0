@@ -367,6 +367,7 @@ async function atualizarMesas() {
         console.error('Erro ao atualizar mesas:', error);
     }
 }
+
 async function registrarPagamento(pedidoId, mesa, id_cliente) {
     try {
 
@@ -434,7 +435,6 @@ async function registrarPagamento(pedidoId, mesa, id_cliente) {
         console.error('Erro ao registrar pagamento:', error);
     }
 }
-
 
 async function Salvar_pedido() {
     try {
