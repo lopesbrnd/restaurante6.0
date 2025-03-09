@@ -13,8 +13,16 @@ describe("Garcom", () => {
 
     beforeEach(() => {
         garcom = new Garcom("Carlos");
-        mesaMock = new Mesa("Mesa 1", 1,) as jest.Mocked<Mesa>;
-        pedidoMock = new Pedido(new Cliente('bernardo', '71999961981')) as jest.Mocked<Pedido>;
+        
+        mesaMock = {
+            nome: "Mesa 1",
+            numero: 1,
+            realizarPedido: jest.fn(),
+            calcularConta: jest.fn().mockReturnValue(100),
+            atualizarDisponibilidade: jest.fn(),
+        } as unknown as jest.Mocked<Mesa>;
+    
+        pedidoMock = new Pedido(new Cliente("Bernardo", "71999961981")) as jest.Mocked<Pedido>;
     });
 
     test("deve registrar um pedido", () => {
@@ -45,5 +53,16 @@ describe("Garcom", () => {
 
     test("deve retornar a disponibilidade do garçom", () => {
         expect(garcom.disponibilidade).toBe(true);
+    });
+    test("deve definir corretamente o status da mesa como disponível ou indisponível", () => {
+        const consoleSpy = jest.spyOn(console, "log").mockImplementation(); // Captura os logs
+           
+        garcom.atualizarMesa(mesaMock, true);
+        expect(consoleSpy).toHaveBeenCalledWith("Mesa 1 está disponível.");
+        
+        garcom.atualizarMesa(mesaMock, false);
+        expect(consoleSpy).toHaveBeenCalledWith("Mesa 1 está indisponível.");
+    
+        consoleSpy.mockRestore(); // Restaura o console original
     });
 });
